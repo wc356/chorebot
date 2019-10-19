@@ -32,12 +32,11 @@ let isClicked = door => {
 //update #of closed doors after each click
 let playDoor = () => {
 	numClosedDoors--;
+	//if all doors are opened execute gameOver()
+	if (numClosedDoors === 0) {
+		gameOver('win');
+	}
 };
-
-//if all doors are opened execute gameOver()
-if (numClosedDoors === 0) {
-	gameOver();
-}
 
 //random door generator
 randomChoreDoorGenerator = () => {
@@ -61,7 +60,7 @@ randomChoreDoorGenerator = () => {
 	}
 };
 
-//if same door has not yet been opened, on click, change image and update var-numClosedDoors
+//if same door has not yet been opened, on click, change image and update numClosedDoors
 if (!isClicked(door1)) {
 	door1.onclick = () => {
 		door1.src = openDoor1;
@@ -82,7 +81,11 @@ if (!isClicked(door3)) {
 }
 
 //game over
-let gameOver = () => {};
+let gameOver = status => {
+	if (status === 'win') {
+		startButton.innerHTML = 'You win! Play again?';
+	}
+};
 
 //call random door generator
 randomChoreDoorGenerator();
