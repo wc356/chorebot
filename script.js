@@ -19,6 +19,7 @@ let numClosedDoors = 3;
 let openDoor1;
 let openDoor2;
 let openDoor3;
+let currentlyPlaying = true;
 
 //check if door is already clicked
 let isClicked = door => {
@@ -30,11 +31,13 @@ let isClicked = door => {
 };
 
 //update #of closed doors after each click
-let playDoor = () => {
+let playDoor = door => {
 	numClosedDoors--;
 	//if all doors are opened execute gameOver()
 	if (numClosedDoors === 0) {
 		gameOver('win');
+	} else if (isBot(door)) {
+		gameOver();
 	}
 };
 
@@ -60,32 +63,63 @@ randomChoreDoorGenerator = () => {
 	}
 };
 
-//if same door has not yet been opened, on click, change image and update numClosedDoors
-if (!isClicked(door1)) {
-	door1.onclick = () => {
+//check if opened door is Bot
+let isBot = door => {
+	if (door.src === botDoorPath) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
+//check if same door has not yet been opened, on click, change image and update numClosedDoors
+door1.onclick = () => {
+	if (currentlyPlaying && !isClicked(door1)) {
 		door1.src = openDoor1;
-		playDoor();
-	};
-}
-if (!isClicked(door2)) {
-	door2.onclick = () => {
+		playDoor(door1);
+	}
+};
+door2.onclick = () => {
+	if (currentlyPlaying && !isClicked(door2)) {
 		door2.src = openDoor2;
-		playDoor();
-	};
-}
-if (!isClicked(door3)) {
-	door3.onclick = () => {
+		playDoor(door2);
+	}
+};
+door3.onclick = () => {
+	if (currentlyPlaying && !isClicked(door3)) {
 		door3.src = openDoor3;
-		playDoor();
-	};
-}
+		playDoor(door3);
+	}
+};
+
+//click button to restart game
+startButton.onclick = () => {
+	if (!currentlyPlaying) {
+		startRound();
+	}
+};
+
+//start round function - reset all game values
+const startRound = () => {
+	door1.src = closedDoorPath;
+	door2.src = closedDoorPath;
+	door3.src = closedDoorPath;
+	numClosedDoors = 3;
+	startButton.innerHTML = 'Good luck!';
+	currentlyPlaying = true;
+	//call random door generator
+	randomChoreDoorGenerator();
+};
 
 //game over
 let gameOver = status => {
 	if (status === 'win') {
 		startButton.innerHTML = 'You win! Play again?';
+	} else {
+		startButton.innerHTML = 'Game over! Play again?';
 	}
+	currentlyPlaying = false;
 };
 
-//call random door generator
-randomChoreDoorGenerator();
+//start round!
+startRound();
