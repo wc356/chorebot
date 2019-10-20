@@ -22,7 +22,7 @@ let openDoor3;
 let currentlyPlaying = true;
 
 //check if door is already clicked
-let isClicked = door => {
+const isClicked = door => {
 	if (door.src === closedDoorPath) {
 		return false;
 	} else {
@@ -31,7 +31,7 @@ let isClicked = door => {
 };
 
 //update #of closed doors after each click
-let playDoor = door => {
+const playDoor = door => {
 	numClosedDoors--;
 	//if all doors are opened execute gameOver()
 	if (numClosedDoors === 0) {
@@ -64,7 +64,7 @@ randomChoreDoorGenerator = () => {
 };
 
 //check if opened door is Bot
-let isBot = door => {
+const isBot = door => {
 	if (door.src === botDoorPath) {
 		return true;
 	} else {
@@ -112,7 +112,7 @@ const startRound = () => {
 };
 
 //game over
-let gameOver = status => {
+const gameOver = status => {
 	if (status === 'win') {
 		startButton.innerHTML = 'You win! Play again?';
 	} else {
