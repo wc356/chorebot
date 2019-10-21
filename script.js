@@ -1,27 +1,36 @@
-//import elements from HTML
+//Import elements
 let door1 = document.getElementById('door1');
 let door2 = document.getElementById('door2');
 let door3 = document.getElementById('door3');
 let startButton = document.getElementById('start');
 
-//import door path image
-let closedDoorPath =
-	'https://s3.amazonaws.com/codecademy-content/projects/chore-door/images/closed_door.svg';
+//Set image paths
 let botDoorPath =
 	'https://s3.amazonaws.com/codecademy-content/projects/chore-door/images/robot.svg';
 let beachDoorPath =
 	'https://s3.amazonaws.com/codecademy-content/projects/chore-door/images/beach.svg';
 let spaceDoorPath =
 	'https://s3.amazonaws.com/codecademy-content/projects/chore-door/images/space.svg';
+let closedDoorPath =
+	'https://s3.amazonaws.com/codecademy-content/projects/chore-door/images/closed_door.svg';
 
-//global var.
+//Global variables
 let numClosedDoors = 3;
 let openDoor1;
 let openDoor2;
 let openDoor3;
 let currentlyPlaying = true;
 
-//check if door is already clicked
+//Check if opened is Bot
+const isBot = door => {
+	if (door.src === botDoorPath) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
+//Prevent over-click same door
 const isClicked = door => {
 	if (door.src === closedDoorPath) {
 		return false;
@@ -30,10 +39,9 @@ const isClicked = door => {
 	}
 };
 
-//update #of closed doors after each click
-const playDoor = door => {
+//Define game-winning condition
+const winCondition = door => {
 	numClosedDoors--;
-	//if all doors are opened execute gameOver()
 	if (numClosedDoors === 0) {
 		gameOver('win');
 	} else if (isBot(door)) {
@@ -41,9 +49,9 @@ const playDoor = door => {
 	}
 };
 
-//random door generator
-randomChoreDoorGenerator = () => {
-	const choreDoor = Math.floor(Math.random() * numClosedDoors);
+//Random generator
+const randomChoreDoorGenerator = () => {
+	let choreDoor = Math.floor(Math.random() * numClosedDoors);
 	switch (choreDoor) {
 		case 0:
 			openDoor1 = botDoorPath;
@@ -52,8 +60,8 @@ randomChoreDoorGenerator = () => {
 			break;
 		case 1:
 			openDoor2 = botDoorPath;
-			openDoor3 = beachDoorPath;
 			openDoor1 = spaceDoorPath;
+			openDoor3 = beachDoorPath;
 			break;
 		default:
 			openDoor3 = botDoorPath;
@@ -63,55 +71,45 @@ randomChoreDoorGenerator = () => {
 	}
 };
 
-//check if opened door is Bot
-const isBot = door => {
-	if (door.src === botDoorPath) {
-		return true;
-	} else {
-		return false;
-	}
-};
-
-//check if same door has not yet been opened, on click, change image and update numClosedDoors
+//On clicking door, open
 door1.onclick = () => {
 	if (currentlyPlaying && !isClicked(door1)) {
 		door1.src = openDoor1;
-		playDoor(door1);
+		winCondition(door1);
 	}
 };
 door2.onclick = () => {
 	if (currentlyPlaying && !isClicked(door2)) {
 		door2.src = openDoor2;
-		playDoor(door2);
+		winCondition(door2);
 	}
 };
 door3.onclick = () => {
 	if (currentlyPlaying && !isClicked(door3)) {
 		door3.src = openDoor3;
-		playDoor(door3);
+		winCondition(door3);
 	}
 };
 
-//click button to restart game
+//On clicking button, restart round
 startButton.onclick = () => {
 	if (!currentlyPlaying) {
 		startRound();
 	}
 };
 
-//start round function - reset all game values
+//Reset values for game restart
 const startRound = () => {
 	door1.src = closedDoorPath;
 	door2.src = closedDoorPath;
 	door3.src = closedDoorPath;
 	numClosedDoors = 3;
-	startButton.innerHTML = 'Good luck!';
+	startButton.innerHTML = 'Good Luck!';
 	currentlyPlaying = true;
-	//call random door generator
 	randomChoreDoorGenerator();
 };
 
-//game over
+//Define game over function
 const gameOver = status => {
 	if (status === 'win') {
 		startButton.innerHTML = 'You win! Play again?';
@@ -121,5 +119,5 @@ const gameOver = status => {
 	currentlyPlaying = false;
 };
 
-//start round!
+//Start new round
 startRound();
