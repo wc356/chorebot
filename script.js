@@ -22,31 +22,16 @@ let openDoor3;
 let currentlyPlaying = true;
 
 //Check if opened is Bot
-const isBot = door => {
-	if (door.src === botDoorPath) {
-		return true;
-	} else {
-		return false;
-	}
-};
+const isBot = door => door.src === botDoorPath;
 
 //Prevent over-click same door
-const isClicked = door => {
-	if (door.src === closedDoorPath) {
-		return false;
-	} else {
-		return true;
-	}
-};
+const isClicked = door => (door.src === closedDoorPath ? false : true);
 
 //Define game-winning condition
 const winCondition = door => {
 	numClosedDoors--;
-	if (numClosedDoors === 0) {
-		gameOver('win');
-	} else if (isBot(door)) {
-		gameOver();
-	}
+	return numClosedDoors === 0 ? gameOver('win')
+	: isBot(door) ? gameOver()
 };
 
 //Random generator
