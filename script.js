@@ -25,7 +25,9 @@ let currentlyPlaying = true;
 const isBot = door => door.src === botDoorPath;
 
 //Prevent over-click same door
-const isClicked = door => (door.src === closedDoorPath ? false : true);
+const isClicked = door => {
+	door.src === closedDoorPath ? false : true;
+};
 
 //Define game-winning condition
 const winCondition = door => {
