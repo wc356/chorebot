@@ -30,8 +30,7 @@ const isClicked = door => (door.src === closedDoorPath ? false : true);
 //Define game-winning condition
 const winCondition = door => {
 	numClosedDoors--;
-	return numClosedDoors === 0 ? gameOver('win')
-	: isBot(door) ? gameOver()
+	numClosedDoors === 0 ? gameOver('win') : isBot(door) ? gameOver() : undefined;
 };
 
 //Random generator
